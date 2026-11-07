@@ -1,0 +1,39 @@
+# Schwere Steam-Spieldateien & Content-Manager-Binärcaches (GitHub 100-MB-Schutz)
+*.img
+*.iso
+*.vdi
+*.qcow2
+*.rom
+*.vars
+*.kn5
+*.bank
+*.dds
+*.acd
+*.wav
+*.mp3
+*.ogg
+*.pdb
+*.dmp
+*.msi
+
+# Executables ausschließen, außer Content Manager.exe im Paket 07
+*.exe
+!07_Content_Manager_Binary/Content Manager.exe
+
+# Content Manager Caches & temporäre Ordner
+**/Plugins/
+**/Temporary/
+**/Static/
+**/Logs/
+**/Cache/
+**/GPUCache/
+**/CrashDumps/
+**/cef/
+
+# OS & Editor Artifacts
+Thumbs.db
+desktop.ini
+.DS_Store
+.history-memo/
+.vscode/gemini-mcp/
+**/.vscode/gemini-mcp/
