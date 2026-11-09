@@ -1,32 +1,57 @@
 # Assetto Corsa – Content Manager & CSP Sandbox (`mestuermer-svg/ac-cm-csp-sandbox`)
 
-Eigenständiges GitHub-Repository für den **Content Manager (CM)**, **Custom Shaders Patch (CSP)** und alle **7 Sandbox-Pakete** aus der `ac-win11-sandbox` (SimRacer `192.168.178.68` / `assetto-corsa-content`).
+Eigenständiges, ultra-schlankes GitHub-Repository für den **Content Manager (CM)**, **Custom Shaders Patch (CSP)** und die **Assetto Corsa Core Engine (AC)** ohne den 140+ GB großen Content-Ballast (Fahrzeuge & Strecken). Gesamtgröße: **nur ca. 181 MB**.
 
 ---
 
-## Enthaltene Sandbox-Pakete
+## Enthaltene Repository-Pakete (10 Pakete)
 
-| Paket-Ordner | Pfad in der Sandbox (`ac-win11-sandbox`) | Beschreibung & Inhalt |
+| Paket-Ordner | Pfad im AC-System | Beschreibung & Inhalt |
 | :--- | :--- | :--- |
-| **`01_Documents_AC_Setups`** | `C:\Users\Docker\Documents\Assetto Corsa\setups\` | Fahrzeug-Setups & Pitfiles (`.ini`) |
-| **`02_Documents_AC_Cfg`** | `C:\Users\Docker\Documents\Assetto Corsa\cfg\` | Benutzer- & Session-Configs inkl. `extension/` (CSP User-Configs), `video.ini`, `controls.ini`, `race.ini` |
-| **`03_CM_AppData_Presets_Data`** | `C:\Users\Docker\AppData\Local\AcTools Content Manager\` | Content Manager Presets, CSP-/Steuerungs-Profile, Server-Favoriten & Datenbanken (`*.data`) |
-| **`04_Steam_AC_Cfg`** | `C:\AssettoCorsa\cfg\`, `system\cfg\`, `server\cfg\` | Engine-Systemkonfiguration, Kamera- & FFB-Templates (`ff_post_process.ini`) |
-| **`05_Steam_AC_Apps_Python`** | `C:\AssettoCorsa\apps\python\` | In-Game Python-Apps & Shared-Memory-Telemetrieskripte |
-| **`06_Steam_AC_Extension_Lua_Config`** | `C:\AssettoCorsa\extension\lua\` & `config\` | **Custom Shaders Patch (CSP)** Lua-Skripte, Physik-Erweiterungen & Shader-Configs |
-| **`07_Content_Manager_Binary`** | `C:\AssettoCorsa\Content Manager.exe` | Content Manager Programmdatei für Sandbox-UI- & Preset-Tests |
+| **`01_Documents_AC_Setups`** | `Documents\Assetto Corsa\setups\` | Fahrzeug-Setups & Pitfiles (`.ini`) |
+| **`02_Documents_AC_Cfg`** | `Documents\Assetto Corsa\cfg\` | Benutzer- & Session-Configs inkl. `extension/` (CSP User-Configs), `video.ini`, `controls.ini`, `race.ini` |
+| **`03_CM_AppData_Presets_Data`** | `AppData\Local\AcTools Content Manager\` | Content Manager Presets, CSP-/Steuerungs-Profile, Server-Favoriten & Datenbanken (`*.data`) |
+| **`04_Steam_AC_Cfg`** | `assettocorsa\cfg\`, `system\cfg\`, `server\cfg\` | Engine-Systemkonfiguration, Kamera- & FFB-Templates (`ff_post_process.ini`) |
+| **`05_Steam_AC_Apps_Python`** | `assettocorsa\apps\python\` | In-Game Python-Apps & Shared-Memory-Telemetrieskripte |
+| **`06_Steam_AC_Extension_Lua_Config`** | `assettocorsa\extension\lua\` & `config\` | **Custom Shaders Patch (CSP)** Lua-Skripte, Physik-Erweiterungen & Shader-Configs |
+| **`07_Content_Manager_Binary`** | `assettocorsa\Content Manager.exe` | Content Manager Programmdatei für UI- & Setup-Tests (10.9 MB) |
+| **`08_Steam_AC_Binaries`** | `assettocorsa\` Root | Lauffähige Engine-Dateien: `acs.exe`, `AssettoCorsa.exe`, `acs_x86.exe`, DLLs (`fmod`, `steam_api`, `msvc*`), `python33.zip` (65 MB) |
+| **`09_Steam_AC_System_Core`** | `assettocorsa\system\` | Engine-Kern: Fonts, Shader, Data, Locales, x64/x86 Bibliotheken (23.2 MB) |
+| **`10_Steam_AC_Content_Core`** | `assettocorsa\content\` | GUI-Assets, UI-Schriften & Wetter-Presets (`gui/`, `fonts/`, `weather/`) (51.9 MB) |
 
 ---
 
-## Synchronisation mit SimRacer & Sandbox
+## Sofort lauffähige Slim-Installation zusammenbauen (`Assemble`)
 
-Über `scripts/sync-cm-github.ps1` können die 7 Pakete direkt mit der SimRacer-Workstation (`192.168.178.68`) bzw. dem `assetto-corsa-content`-Workspace abgeglichen und paketweise zu GitHub gepusht werden:
+Über das PowerShell-Skript `scripts/sync-cm-github.ps1` lässt sich mit einem einzigen Befehl eine vollständig lauffähige Installation unter `dist/AssettoCorsa_Slim` erzeugen:
 
 ```powershell
-# 1. Aus lokaler Sandbox / SimRacer aktualisieren und nach GitHub pushen:
-.\scripts\sync-cm-github.ps1 -PushToGitHub
+# 1. Baut die lauffähige Slim-Installation zusammen:
+.\scripts\sync-cm-github.ps1 -AssembleSlimAC
 
-# 2. Lokal in Documents / AppData wiederherstellen:
+# 2. Ausführen:
+# Startet Content Manager direkt in der schlanken Umgebung:
+.\dist\AssettoCorsa_Slim\Content Manager.exe
+```
+
+Fahrzeuge und Strecken können bei Bedarf per Junction direkt aus der SimRacer-Bibliothek eingebunden werden:
+```powershell
+mklink /J "dist\AssettoCorsa_Slim\content\cars" "\\192.168.178.68\c$\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\cars"
+mklink /J "dist\AssettoCorsa_Slim\content\tracks" "\\192.168.178.68\c$\Program Files (x86)\Steam\steamapps\common\assettocorsa\content\tracks"
+```
+
+---
+
+## Synchronisation mit SimRacer & GitHub
+
+```powershell
+# 1. Live-Sync direkt vom SimRacer über LAN (SMB) abrufen:
+.\scripts\sync-cm-github.ps1 -FromSimRacer
+
+# 2. Synchronisieren und direkt zu GitHub origin/main pushen:
+.\scripts\sync-cm-github.ps1 -FromSimRacer -PushToGitHub
+
+# 3. Lokal in Documents / AppData wiederherstellen:
 .\scripts\sync-cm-github.ps1 -RestoreToLocal
 ```
 

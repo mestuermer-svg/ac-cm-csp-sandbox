@@ -16,9 +16,21 @@
 *.dmp
 *.msi
 
-# Executables ausschließen, außer Content Manager.exe im Paket 07
+# Executables ausschließen, außer Content Manager.exe und AC-Core-Binaries
 *.exe
 !07_Content_Manager_Binary/Content Manager.exe
+!08_Steam_AC_Binaries/*.exe
+!08_Steam_AC_Binaries/*.dll
+!08_Steam_AC_Binaries/*.zip
+!08_Steam_AC_Binaries/*.txt
+!08_Steam_AC_Binaries/*.config
+!09_Steam_AC_System_Core/**/*.dll
+!09_Steam_AC_System_Core/**/*.exe
+
+# Assemblierte Builds & Ausgabeziele ignorieren
+dist/
+build/
+output/
 
 # Content Manager Caches & temporäre Ordner
 **/Plugins/
